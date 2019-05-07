@@ -7,6 +7,12 @@
       },
       "policyScope": {
           "value": "/subscriptions/5355e294-a200-4df6-86f4-aaaceaf646ca/providers/Microsoft.Authorization/policyDefinitions/"
+      },
+      "policySetScope": {
+        "value": "/subscriptions/5355e294-a200-4df6-86f4-aaaceaf646ca/providers/Microsoft.Authorization/policySetDefinitions/"
+      },
+      "assignmentScope": {
+          "value": "/subscriptions/5355e294-a200-4df6-86f4-aaaceaf646ca/"
       }
     }
   }

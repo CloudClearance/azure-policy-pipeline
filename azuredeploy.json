@@ -11,16 +11,22 @@
         "policyScope": {
             "type": "string"
         },
+        "policySetScope": {
+            "type": "string"
+        },
         "location": {
+            "type": "string"
+        },
+        "assignmentScope": {
             "type": "string"
         }
     },
     "resources": [
         {
-            "apiVersion": "2018-05-01",
             "name": "policy-db-level-threat-detection",
             "type": "Microsoft.Resources/deployments",
-            "location": "westus2",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -30,10 +36,10 @@
             }
         },
         {
-            "apiVersion": "2018-05-01",
             "name": "policyset-db-level-threat-detection",
             "type": "Microsoft.Resources/deployments",
-            "location": "westus2",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -43,8 +49,28 @@
                 "parameters": {
                     "PolicyScope":{"value": "[parameters('policyScope')]"}
                 }
-            }
-        }
+            },
+            "dependsOn": [
+                "policy-db-level-threat-detection"
+            ]
+        },
+        {
+            "name": "assignmnet-db-level-threat-detection",
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "displayName": "string",
+                "policyDefinitionId": "[concat(parameters('policySetScope'), 'sql-server-initative')]",
+                "scope": "[parameters('assignmentScope')]",
+                "notScopes": [],
+                "parameters": {},
+                "description": "Assignment for HITRUST SQL Initiative"
+            },
+            "dependsOn": [
+                "policyset-db-level-threat-detection"
+            ]
+          }
     ],
     "outputs": {
         "policyScope": {

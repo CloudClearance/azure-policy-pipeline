@@ -65,13 +65,7 @@ $TemplateJSON = Get-Content $TemplateFile -Raw | ConvertFrom-Json
 
 $TemplateSchema = $TemplateJson | Select-Object -expand '$schema' -ErrorAction Ignore
 
-if ($TemplateSchema -like '*subscriptionDeploymentTemplate.json*') {
-    $deploymentScope = "Subscription"
-}
-else {
-    $deploymentScope = "ResourceGroup"
-}
-
+$deploymentScope = "Subscription"
 Write-Host "Running a $deploymentScope scoped deployment..."
 
 $ArtifactsLocationParameter = $TemplateJson | Select-Object -expand 'parameters' -ErrorAction Ignore | Select-Object -Expand '_artifactsLocation' -ErrorAction Ignore
@@ -162,21 +156,9 @@ else {
 
 $TemplateArgs.Add('TemplateParameterFile', $TemplateParametersFile)
 
-# Create the resource group only when it doesn't already exist - and only in RG scoped deployments
-if ($deploymentScope -eq "ResourceGroup") {
-    if ((Get-AzResourceGroup -Name $ResourceGroupName -Location $Location -Verbose -ErrorAction SilentlyContinue) -eq $null) {
-        New-AzResourceGroup -Name $ResourceGroupName -Location $Location -Verbose -Force -ErrorAction Stop
-    }
-}
 if ($ValidateOnly) {
-    if ($deploymentScope -eq "Subscription") {
-        #subscription scoped deployment
-        $ErrorMessages = Format-ValidationOutput (Test-AzDeployment -Location $Location @TemplateArgs @OptionalParameters)
-    }
-    else {
-        #resourceGroup deployment 
-        $ErrorMessages = Format-ValidationOutput (Test-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName @TemplateArgs @OptionalParameters)
-    }
+    #subscription scoped deployment
+    $ErrorMessages = Format-ValidationOutput (Test-AzDeployment -Location $Location @TemplateArgs @OptionalParameters)
     if ($ErrorMessages) {
         Write-Output '', 'Validation returned the following errors:', @($ErrorMessages), '', 'Template is invalid.'
     }
