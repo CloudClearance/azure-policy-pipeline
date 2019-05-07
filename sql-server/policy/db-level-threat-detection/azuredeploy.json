@@ -1,0 +1,51 @@
+{
+   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+   "contentVersion": "1.0.0.0",
+   "parameters": {},
+   "resources": [
+      {
+         "name": "deny-sql-db-threat-detection-policy",
+         "type": "Microsoft.Authorization/policyDefinitions",
+         "apiVersion": "2018-05-01",
+         "properties": {
+            "displayName": "Deny DB level threat detection by setting",
+            "description": "Deny threat detection setting for SQL databases",
+            "mode": "All",
+            "parameters": {
+               "requiredSetting": {
+                  "type": "String",
+                  "allowedValues": [
+                     "enabled",
+                     "disabled"
+                  ],
+                  "defaultValue": "disabled",
+                  "metadata": {
+                     "displayName": "Threat Detection Setting"
+                  }
+               }
+            },
+            "policyRule": {
+               "if": {
+                  "allOf": [
+                     {
+                        "field": "type",
+                        "equals": "Microsoft.SQL/servers/databases"
+                     },
+                     {
+                        "field": "name",
+                        "notEquals": "master"
+                     },
+                     {
+                        "field": "Microsoft.Sql/securityAlertPolicies.state",
+                        "equals": "[[parameters('requiredSetting')]"
+                     }
+                  ]
+               },
+               "then": {
+                  "effect": "deny"
+               }
+            }
+         }
+      }
+   ]
+}

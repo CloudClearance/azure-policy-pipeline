@@ -1,0 +1,55 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "_artifactsLocation": {
+            "type": "string"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring"
+        },
+        "policyScope": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-05-01",
+            "name": "policy-db-level-threat-detection",
+            "type": "Microsoft.Resources/deployments",
+            "location": "westus2",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), 'sql-server/policy/db-level-threat-detection/azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-05-01",
+            "name": "policyset-db-level-threat-detection",
+            "type": "Microsoft.Resources/deployments",
+            "location": "westus2",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), 'sql-server/initative/azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "PolicyScope":{"value": "[parameters('policyScope')]"}
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "policyScope": {
+          "type": "string",
+          "value": "[parameters('policyScope')]"
+        }
+      }
+}

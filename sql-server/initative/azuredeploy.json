@@ -1,0 +1,34 @@
+{
+   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+   "contentVersion": "1.0.0.0",
+   "parameters": {
+      "policyScope": {
+          "type": "string"
+      }
+   },
+   "resources": [
+      {
+         "name": "sql-server-initative",
+         "type": "Microsoft.Authorization/policySetDefinitions",
+         "apiVersion": "2018-05-01",
+         "properties": {
+            "displayName": "SQL Server HITRUST Initiative",
+            "description": "This policy ensures the managed Azure SQL is HITRUST compliant",
+            "policyType": "Custom",
+            "policyDefinitions": [
+               {
+                 "policyDefinitionId": "[concat(parameters('policyScope'), 'deny-sql-db-threat-detection-policy')]",
+                  "parameters": {
+                     "requiredSetting": {
+                        "value": "enabled"
+                     }
+                  }
+               }
+            ],
+            "metadata": {
+               "category": "HITRUST"
+            }
+         }
+      }
+   ]
+}

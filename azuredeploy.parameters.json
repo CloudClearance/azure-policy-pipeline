@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "location": {
+          "value": "westus2"
+      },
+      "policyScope": {
+          "value": "/subscriptions/5355e294-a200-4df6-86f4-aaaceaf646ca/providers/Microsoft.Authorization/policyDefinitions/"
+      }
+    }
+  }
