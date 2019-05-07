@@ -12,7 +12,7 @@ Before starting, ensure you have the Azure PowerShell module installed via [this
 
 - Open a PowerShell window
 - Login using the `Connect-AzAccount` command
-- Ensure you are working under the correct subscription with the `$context = Get-AzSubscription -SubscriptionId xxxx-xxxx-xxxx` and `Set-AzContext $context` commands. If you need a list of subscriptions, use the `Get-AzSubscription` command.
+- Ensure you are working under the correct subscription with the `Get-AzSubscription -SubscriptionId xxxx-xxxx-xxxx | Set-AzContext` command. If you need a list of subscriptions, use the `Get-AzSubscription` command.
 - Execute the below deployment script
 ```powershell
 .\Deploy-AzTemplate.ps1 -ResourceGroupName 'test' -Location 'westus2' -TemplateFile 'azuredeploy.json' -TemplateParametersFile 'azuredeploy.
