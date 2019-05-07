@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: AzurePowerShell@3
+- task: AzurePowerShell@4
   displayName: 'Azure PowerShell script: FilePath'
   inputs:
     azureSubscription: 'CSE 2 (5355e294-a200-4df6-86f4-aaaceaf646ca)'
