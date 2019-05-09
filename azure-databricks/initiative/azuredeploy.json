@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "policyScope": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "name": "azure-databricks-initative",
+      "type": "Microsoft.Authorization/policySetDefinitions",
+      "apiVersion": "2018-05-01",
+      "properties": {
+        "displayName": "Azure Databricks Initiative",
+        "description": "This policy ensures the managed Azure Databricks initiatives",
+        "policyType": "Custom",
+        "policyDefinitions": [
+          {
+            "policyDefinitionId": "[concat(parameters('policyScope'), 'deny-azure-databricks-network-accessibility')]",
+            "parameters": {
+              "requiredSetting": {
+                "value": "enabled"
+              }
+            }
+          }
+        ],
+        "metadata": {
+          "category": "HITRUST"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnetName": {
+      "defaultValue": "azpolicypoc_vnet",
+      "type": "string"
+    }
+
+  },
+  "resources": [
+    {
+      "name": "deny-vnet-network-accessibility-azure-databricks",
+      "type": "Microsoft.Authorization/policyDefinitions",
+      "apiVersion": "2018-05-01",
+      "properties": {
+        "displayName": "Use approved vnet for Azure Databricks",
+        "description": "Automated check safeguards for networking restrictions the Databricks VNet. It will validate that the proper the VNet exists and that it is configured with the correct security group. ",
+        "mode": "All",
+        "parameters": {
+          "requiredSetting": {
+            "type": "String",
+            "allowedValues": [
+              "enabled",
+              "disabled"
+            ],
+            "defaultValue": "disabled",
+            "metadata": {
+              "displayName": "Network Accessibility"
+            }
+          }
+        },
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Databricks/workspaces"
+              },
+              {
+                "field": "Microsoft.DataBricks/workspaces/parameters",
+                "notcontains": "[parameters('vnetName')]"
+              }
+            ]
+          },
+          "then": {
+            "effect": "deny"
+          }
+        }
+      }
+    }
+  ]
+}
