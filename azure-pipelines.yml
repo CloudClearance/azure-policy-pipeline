@@ -16,3 +16,4 @@ steps:
     azureSubscription: 'CSE 2 (5355e294-a200-4df6-86f4-aaaceaf646ca)'
     scriptPath: 'Deploy-AzTemplate.ps1'
     scriptArguments: -Location 'westus2' -TemplateFile 'azuredeploy.json' -TemplateParametersFile 'azuredeploy.parameters.json' -StorageAccountName '' -ArtifactStagingDirectory '.' -StorageContainerName 'azurepolicypipeline-storageaccount' -UploadArtifacts
+    azurePowerShellVersion: LatestVersion
